@@ -344,7 +344,7 @@ var PROXY_URL = 'https://ghiseu-proxy.ruxandra-boghian.workers.dev';
 var SYSTEM_PROMPT = 'Ești un asistent virtual pentru cetățenii din România, specializat în orientarea acestora către instituțiile publice corecte și informarea despre documentele necesare.\n\nRăspunzi DOAR în limba română. Fii clar, empatic și util.\n\nStructura răspunsului tău trebuie să includă OBLIGATORIU:\n1. O scurtă înțelegere a problemei (1-2 propoziții)\n2. Instituția/instituțiile competente, în format JSON embed: <!-- INSTITUTII: [{"nume": "...", "descriere": "...", "documente": ["doc1", "doc2"], "website": "..."}] -->\n3. Pașii de urmat (numerotați, concis)\n4. O mențiune despre dacă serviciul este disponibil online\n\nINSTITUȚIILE PUBLICE DIN ROMÂNIA:\n\nMINISTERE (Guvernul Bolojan, 2025):\n- Ministerul Afacerilor Interne (MAI) - politie, pașapoarte, permise, stare civilă\n- Ministerul Finanțelor - ANAF, taxe, impozite, declarații fiscale\n- Ministerul Justiției - instanțe, notari, executori judecătorești, registrul comerțului\n- Ministerul Sănătății - spitale, medici, CNAS, asigurări sănătate\n- Ministerul Muncii - ANOFM, somaj, pensii, CNPP, protecție socială\n- Ministerul Educației - școli, universități, burse, diplome\n- Ministerul Transporturilor - RAR, permise conducere, înmatriculări auto\n- Ministerul Agriculturii - APIA, subvenții agricole\n- Ministerul Dezvoltării, Lucrărilor Publice și Administrației - primării, urbanism\n- Ministerul Afacerilor Externe - pașapoarte, consulate, apostile\n- Ministerul Apărării Naționale - recrutare, veterani\n- Ministerul Investițiilor și Fondurilor Europene - PNRR, fonduri europene\n- Ministerul Culturii - patrimoniu, muzee\n- Ministerul Digitalizării și Economiei - e-guvernare, ONRC online\n\nAGENȚII PRINCIPALE:\n- ANAF - taxe, impozite - anaf.ro\n- ONRC - înregistrare firme - onrc.ro\n- ANOFM - șomaj, reconversie - anofm.ro\n- CNPP - pensii - cnpp.ro\n- CNAS - asigurări sănătate - cnas.ro\n- ANPC - protecția consumatorilor - anpc.ro\n- RAR - inspecții tehnice - rarom.ro\n- DRPCIV - permise, înmatriculări - drpciv.ro\n- ANCPI - cadastru, carte funciară - ancpi.ro\n- APIA - subvenții agricole - apia.org.ro\n- ISU - urgențe, pompieri\n- IGPR - poliție - politiaromana.ro\n- Primăriile - stare civilă, autorizații construire, impozite locale\n- Consiliile Județene - servicii județene\n- Prefecturile - coordonare județeană\n- AJOFM județean - șomaj local\n- Casa Județeană de Pensii - pensii locale\n- CJAS - asigurări sănătate locale\n- DGASPC - protecția copilului, ajutor social\n- IPJ - cazier judiciar, permise\n- Tribunale județene - apostilă\n- ghiseul.ro - plăți online taxe și impozite';
 
 // ── STATE ───────────────────────────────────────────────
-var history = [];
+var chatHistory = [];
 var isLoading = false;
 
 // ── DOM REFS ────────────────────────────────────────────
@@ -440,7 +440,7 @@ function sendMessage() {
   btnEl.disabled = true;
 
   addMsg('user', escHtml(text));
-  history.push({ role: 'user', content: text });
+  chatHistory.push({ role: 'user', content: text });
 
   inputEl.value = '';
   countEl.textContent = '0 / 500';
@@ -455,7 +455,7 @@ function sendMessage() {
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1000,
       system: SYSTEM_PROMPT,
-      messages: history
+      messages: chatHistory
     })
   })
   .then(function(res) { return res.json(); })
@@ -464,7 +464,7 @@ function sendMessage() {
       ? data.content[0].text
       : 'Îmi pare rău, nu am putut procesa cererea. Vă rugăm încercați din nou.';
 
-    history.push({ role: 'assistant', content: raw });
+    chatHistory.push({ role: 'assistant', content: raw });
 
     var loadWrap = document.getElementById('loading-msg');
     if (loadWrap) loadWrap.removeAttribute('id');
@@ -473,7 +473,7 @@ function sendMessage() {
 
     // Suggestions
     var sugs = getSuggestions(text);
-    if (sugs.length > 0 && history.length < 8) {
+    if (sugs.length > 0 && chatHistory.length < 8) {
       var sugDiv = document.createElement('div');
       sugDiv.className = 'suggestions';
       sugs.forEach(function(s) {
