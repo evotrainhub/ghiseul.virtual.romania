@@ -6,331 +6,289 @@
 <title>Ghișeu Virtual — Servicii Publice România</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --albastru: #003087;
-    --galben: #FFD700;
-    --alb: #F8F6F0;
-    --gri: #2C2C2C;
-    --gri-deschis: #E8E4DC;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: var(--alb);
-    color: var(--gri);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  header {
-    background: var(--albastru);
-    color: white;
-    border-bottom: 4px solid var(--galben);
-  }
-
-  .header-top {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 32px;
-  }
-
-  .stema {
-    width: 52px; height: 52px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-
-  .header-text h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-
-  .header-text p {
-    font-size: 0.78rem;
-    opacity: 0.75;
-    font-family: 'IBM Plex Mono', monospace;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  .header-badge {
-    margin-left: auto;
-    background: var(--galben);
-    color: var(--albastru);
-    font-size: 0.7rem;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 2px;
-    font-family: 'IBM Plex Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .chat-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    max-width: 820px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 24px 24px 0;
-  }
-
-  .disclaimer {
-    background: #FFF8DC;
-    border: 1px solid #e8c84a;
-    border-left: 4px solid var(--galben);
-    border-radius: 4px;
-    padding: 10px 14px;
-    font-size: 0.78rem;
-    color: #5a4a00;
-    margin-bottom: 20px;
-    font-family: 'IBM Plex Mono', monospace;
-    line-height: 1.5;
-  }
-
-  #chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-bottom: 16px;
-    min-height: 300px;
-    max-height: 480px;
-  }
-
-  .msg {
-    display: flex;
-    gap: 12px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .msg.user { flex-direction: row-reverse; }
-
-  .avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-    margin-top: 4px;
-  }
-
-  .avatar.bot { background: var(--albastru); }
-  .avatar.user { background: var(--gri-deschis); }
-
-  .bubble {
-    max-width: 75%;
-    padding: 12px 16px;
-    border-radius: 4px;
-    font-size: 0.88rem;
-    line-height: 1.65;
-  }
-
-  .bubble.bot {
-    background: white;
-    border: 1px solid var(--gri-deschis);
-    border-left: 3px solid var(--albastru);
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
-  }
-
-  .bubble.user {
-    background: var(--albastru);
-    color: white;
-  }
-
-  .bubble.loading {
-    background: white;
-    border: 1px solid var(--gri-deschis);
-    border-left: 3px solid var(--galben);
-  }
-
-  .dots span {
-    display: inline-block;
-    width: 6px; height: 6px;
-    background: var(--albastru);
-    border-radius: 50%;
-    margin: 0 2px;
-    animation: bounce 1.2s infinite;
-  }
-  .dots span:nth-child(2) { animation-delay: 0.2s; }
-  .dots span:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-6px); }
-  }
-
-  .card-institutie {
-    background: #f0f4ff;
-    border: 1px solid #c0cef0;
-    border-radius: 4px;
-    padding: 10px 12px;
-    margin: 8px 0 4px;
-    font-size: 0.82rem;
-  }
-
-  .card-institutie strong {
-    color: var(--albastru);
-    display: block;
-    margin-bottom: 4px;
-    font-size: 0.85rem;
-  }
-
-  .doc-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 6px;
-  }
-
-  .doc-tag {
-    background: var(--albastru);
-    color: white;
-    font-size: 0.7rem;
-    padding: 2px 7px;
-    border-radius: 2px;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .sug-btn {
-    background: white;
-    border: 1px solid var(--albastru);
-    color: var(--albastru);
-    padding: 5px 11px;
-    border-radius: 3px;
-    font-size: 0.77rem;
-    cursor: pointer;
-    font-family: 'IBM Plex Sans', sans-serif;
-    transition: all 0.15s;
-  }
-
-  .sug-btn:hover { background: var(--albastru); color: white; }
-
-  .input-area {
-    position: sticky;
-    bottom: 0;
-    background: var(--alb);
-    padding: 16px 0 20px;
-    border-top: 2px solid var(--gri-deschis);
-    margin-top: 8px;
-  }
-
-  .input-row {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-  }
-
-  #user-input {
-    flex: 1;
-    background: white;
-    border: 1.5px solid #ccc;
-    border-radius: 4px;
-    padding: 12px 14px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.88rem;
-    color: var(--gri);
-    resize: none;
-    min-height: 48px;
-    max-height: 120px;
-    transition: border-color 0.2s;
-    line-height: 1.5;
-  }
-
-  #user-input:focus { outline: none; border-color: var(--albastru); }
-
-  #send-btn {
-    background: var(--albastru);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 12px 20px;
-    font-size: 0.88rem;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s;
-    white-space: nowrap;
-    height: 48px;
-  }
-
-  #send-btn:hover { background: #002070; }
-  #send-btn:disabled { background: #aaa; cursor: not-allowed; }
-
-  .char-count {
-    font-size: 0.72rem;
-    color: #999;
-    font-family: 'IBM Plex Mono', monospace;
-    text-align: right;
-    margin-top: 4px;
-  }
-
-  .quick-topics {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-
-  .topic-chip {
-    background: white;
-    border: 1px solid var(--gri-deschis);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 0.77rem;
-    cursor: pointer;
-    color: var(--gri);
-    transition: all 0.15s;
-    font-family: 'IBM Plex Sans', sans-serif;
-  }
-
-  .topic-chip:hover { background: var(--albastru); color: white; border-color: var(--albastru); }
-
-  footer {
-    background: var(--gri);
-    color: #999;
-    text-align: center;
-    padding: 10px;
-    font-size: 0.72rem;
-    font-family: 'IBM Plex Mono', monospace;
-    letter-spacing: 0.03em;
-    margin-top: auto;
-  }
-
-  @media (max-width: 600px) {
-    .chat-wrapper { padding: 12px 12px 0; }
-    .header-top { padding: 12px 16px; }
-    .header-text h1 { font-size: 1.15rem; }
-    .bubble { max-width: 90%; }
-  }
+:root {
+  --albastru: #003087;
+  --galben: #FFD700;
+  --alb: #F8F6F0;
+  --gri: #2C2C2C;
+  --gri-deschis: #E8E4DC;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--alb);
+  color: var(--gri);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  background: var(--albastru);
+  color: white;
+  border-bottom: 4px solid var(--galben);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 32px;
+}
+.stema {
+  width: 52px; height: 52px;
+  background: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.header-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.header-text p {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.header-badge {
+  margin-left: auto;
+  background: var(--galben);
+  color: var(--albastru);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.chat-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 820px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 24px 24px 0;
+}
+.disclaimer {
+  background: #FFF8DC;
+  border: 1px solid #e8c84a;
+  border-left: 4px solid var(--galben);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  color: #5a4a00;
+  margin-bottom: 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  line-height: 1.5;
+}
+.quick-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.topic-chip {
+  background: white;
+  border: 1px solid var(--gri-deschis);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.77rem;
+  cursor: pointer;
+  color: var(--gri);
+  transition: all 0.15s;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.topic-chip:hover {
+  background: var(--albastru);
+  color: white;
+  border-color: var(--albastru);
+}
+#chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+  min-height: 300px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+.msg {
+  display: flex;
+  gap: 12px;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.msg.user { flex-direction: row-reverse; }
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.avatar.bot  { background: var(--albastru); }
+.avatar.user { background: var(--gri-deschis); }
+.bubble {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+.bubble.bot {
+  background: white;
+  border: 1px solid var(--gri-deschis);
+  border-left: 3px solid var(--albastru);
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+}
+.bubble.user {
+  background: var(--albastru);
+  color: white;
+}
+.bubble.loading {
+  background: white;
+  border: 1px solid var(--gri-deschis);
+  border-left: 3px solid var(--galben);
+}
+.dots span {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--albastru);
+  border-radius: 50%;
+  margin: 0 2px;
+  animation: bounce 1.2s infinite;
+}
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%           { transform: translateY(-6px); }
+}
+.card-institutie {
+  background: #f0f4ff;
+  border: 1px solid #c0cef0;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin: 8px 0 4px;
+  font-size: 0.82rem;
+}
+.card-institutie strong {
+  color: var(--albastru);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+.doc-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.doc-tag {
+  background: var(--albastru);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.sug-btn {
+  background: white;
+  border: 1px solid var(--albastru);
+  color: var(--albastru);
+  padding: 5px 11px;
+  border-radius: 3px;
+  font-size: 0.77rem;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: all 0.15s;
+}
+.sug-btn:hover { background: var(--albastru); color: white; }
+.input-area {
+  position: sticky;
+  bottom: 0;
+  background: var(--alb);
+  padding: 16px 0 20px;
+  border-top: 2px solid var(--gri-deschis);
+  margin-top: 8px;
+}
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+#user-input {
+  flex: 1;
+  background: white;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  padding: 12px 14px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--gri);
+  resize: none;
+  min-height: 48px;
+  max-height: 120px;
+  transition: border-color 0.2s;
+  line-height: 1.5;
+}
+#user-input:focus { outline: none; border-color: var(--albastru); }
+#send-btn {
+  background: var(--albastru);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 0.88rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  height: 48px;
+}
+#send-btn:hover    { background: #002070; }
+#send-btn:disabled { background: #aaa; cursor: not-allowed; }
+.char-count {
+  font-size: 0.72rem;
+  color: #999;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: right;
+  margin-top: 4px;
+}
+footer {
+  background: var(--gri);
+  color: #999;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.72rem;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.03em;
+  margin-top: auto;
+}
+@media (max-width: 600px) {
+  .chat-wrapper { padding: 12px 12px 0; }
+  .header-top   { padding: 12px 16px; }
+  .header-text h1 { font-size: 1.15rem; }
+  .bubble       { max-width: 90%; }
+}
 </style>
 </head>
 <body>
@@ -347,6 +305,7 @@
 </header>
 
 <div class="chat-wrapper">
+
   <div class="disclaimer">
     ⚠️ Acest asistent oferă orientare generală. Pentru informații oficiale și actualizate, consultați direct instituția competentă.
   </div>
@@ -366,11 +325,12 @@
 
   <div class="input-area">
     <div class="input-row">
-      <textarea id="user-input" placeholder="Descrieți problema sau nevoia dvs. (ex: vreau să obțin un certificat de naștere...)" rows="1" maxlength="500" oninput="autoResize(this); updateCount()"></textarea>
-      <button id="send-btn" onclick="sendMessage()">Trimite ▶</button>
+      <textarea id="user-input" placeholder="Descrieți problema sau nevoia dvs. (ex: vreau să obțin un certificat de naștere...)" rows="1" maxlength="500"></textarea>
+      <button id="send-btn">Trimite ▶</button>
     </div>
     <div class="char-count" id="char-count">0 / 500</div>
   </div>
+
 </div>
 
 <footer>
@@ -378,222 +338,203 @@
 </footer>
 
 <script>
-const SYSTEM_PROMPT = `Ești un asistent virtual pentru cetățenii din România, specializat în orientarea acestora către instituțiile publice corecte și informarea despre documentele necesare.
+// ── CONFIG ──────────────────────────────────────────────
+var PROXY_URL = 'https://ghiseu-proxy.ruxandra-boghian.workers.dev';
 
-Răspunzi DOAR în limba română. Fii clar, empatic și util.
+var SYSTEM_PROMPT = 'Ești un asistent virtual pentru cetățenii din România, specializat în orientarea acestora către instituțiile publice corecte și informarea despre documentele necesare.\n\nRăspunzi DOAR în limba română. Fii clar, empatic și util.\n\nStructura răspunsului tău trebuie să includă OBLIGATORIU:\n1. O scurtă înțelegere a problemei (1-2 propoziții)\n2. Instituția/instituțiile competente, în format JSON embed: <!-- INSTITUTII: [{"nume": "...", "descriere": "...", "documente": ["doc1", "doc2"], "website": "..."}] -->\n3. Pașii de urmat (numerotați, concis)\n4. O mențiune despre dacă serviciul este disponibil online\n\nINSTITUȚIILE PUBLICE DIN ROMÂNIA:\n\nMINISTERE (Guvernul Bolojan, 2025):\n- Ministerul Afacerilor Interne (MAI) - politie, pașapoarte, permise, stare civilă\n- Ministerul Finanțelor - ANAF, taxe, impozite, declarații fiscale\n- Ministerul Justiției - instanțe, notari, executori judecătorești, registrul comerțului\n- Ministerul Sănătății - spitale, medici, CNAS, asigurări sănătate\n- Ministerul Muncii - ANOFM, somaj, pensii, CNPP, protecție socială\n- Ministerul Educației - școli, universități, burse, diplome\n- Ministerul Transporturilor - RAR, permise conducere, înmatriculări auto\n- Ministerul Agriculturii - APIA, subvenții agricole\n- Ministerul Dezvoltării, Lucrărilor Publice și Administrației - primării, urbanism\n- Ministerul Afacerilor Externe - pașapoarte, consulate, apostile\n- Ministerul Apărării Naționale - recrutare, veterani\n- Ministerul Investițiilor și Fondurilor Europene - PNRR, fonduri europene\n- Ministerul Culturii - patrimoniu, muzee\n- Ministerul Digitalizării și Economiei - e-guvernare, ONRC online\n\nAGENȚII PRINCIPALE:\n- ANAF - taxe, impozite - anaf.ro\n- ONRC - înregistrare firme - onrc.ro\n- ANOFM - șomaj, reconversie - anofm.ro\n- CNPP - pensii - cnpp.ro\n- CNAS - asigurări sănătate - cnas.ro\n- ANPC - protecția consumatorilor - anpc.ro\n- RAR - inspecții tehnice - rarom.ro\n- DRPCIV - permise, înmatriculări - drpciv.ro\n- ANCPI - cadastru, carte funciară - ancpi.ro\n- APIA - subvenții agricole - apia.org.ro\n- ISU - urgențe, pompieri\n- IGPR - poliție - politiaromana.ro\n- Primăriile - stare civilă, autorizații construire, impozite locale\n- Consiliile Județene - servicii județene\n- Prefecturile - coordonare județeană\n- AJOFM județean - șomaj local\n- Casa Județeană de Pensii - pensii locale\n- CJAS - asigurări sănătate locale\n- DGASPC - protecția copilului, ajutor social\n- IPJ - cazier judiciar, permise\n- Tribunale județene - apostilă\n- ghiseul.ro - plăți online taxe și impozite';
 
-Structura răspunsului tău trebuie să includă OBLIGATORIU:
-1. O scurtă înțelegere a problemei (1-2 propoziții)
-2. Instituția/instituțiile competente, în format JSON embed: <!-- INSTITUTII: [{"nume": "...", "descriere": "...", "documente": ["doc1", "doc2"], "website": "..."}] -->
-3. Pașii de urmat (numerotați, concis)
-4. O mențiune despre dacă serviciul este disponibil online
+// ── STATE ───────────────────────────────────────────────
+var history = [];
+var isLoading = false;
 
-INSTITUȚIILE PUBLICE DIN ROMÂNIA pe care le cunoști:
+// ── DOM REFS ────────────────────────────────────────────
+var chatEl    = document.getElementById('chat-messages');
+var inputEl   = document.getElementById('user-input');
+var btnEl     = document.getElementById('send-btn');
+var countEl   = document.getElementById('char-count');
+var topicsEl  = document.getElementById('quick-topics');
 
-MINISTERE (Guvernul Bolojan, 2025):
-- Ministerul Afacerilor Interne (MAI) - politie, pașapoarte, permise, stare civilă
-- Ministerul Finanțelor - ANAF, taxe, impozite, declarații fiscale
-- Ministerul Justiției - instanțe, notari, executori judecătorești, registrul comerțului
-- Ministerul Sănătății - spitale, medici, CNAS, asigurări sănătate
-- Ministerul Muncii - ANOFM, somaj, pensii, CNPP, protecție socială
-- Ministerul Educației - școli, universități, burse, diplome
-- Ministerul Transporturilor - RAR, permise conducere, înmatriculări auto
-- Ministerul Agriculturii - APIA, subvenții agricole, fonduri europene agricole
-- Ministerul Dezvoltării, Lucrărilor Publice și Administrației - primării, urbanism, construcții
-- Ministerul Afacerilor Externe - pașapoarte, consulate, apostile
-- Ministerul Apărării Naționale - recrutare, veterani, centre militare
-- Ministerul Investițiilor și Fondurilor Europene - programe europene, PNRR
-- Ministerul Culturii - patrimoniu, muzee, autorizații culturale
-- Ministerul Digitalizării și Economiei - e-guvernare, ANRE, ONRC online
-
-AGENȚII ȘI AUTORITĂȚI PRINCIPALE:
-- ANAF (Agenția Națională de Administrare Fiscală) - taxe, impozite, declarații - anaf.ro
-- ONRC (Oficiul Național al Registrului Comerțului) - înregistrare firme - onrc.ro
-- ANOFM (Agenția Națională pentru Ocuparea Forței de Muncă) - șomaj, reconversie - anofm.ro
-- CNPP (Casa Națională de Pensii Publice) - pensii - cnpp.ro
-- CNAS (Casa Națională de Asigurări de Sănătate) - card sănătate - cnas.ro
-- ANRE (Autoritatea Națională de Reglementare în Energie) - energie, gaze - anre.ro
-- RAR (Registrul Auto Român) - inspecții tehnice - rarom.ro
-- CNAIR - autostrăzi, drumuri naționale - cnair.ro
-- ANSVSA (Autoritatea Națională Sanitară Veterinară) - siguranță alimentară
-- ANPC (Autoritatea Națională pentru Protecția Consumatorilor) - reclamații consumatori - anpc.ro
-- ASF (Autoritatea de Supraveghere Financiară) - asigurări, piețe capital - asfromania.ro
-- BNR (Banca Națională a României) - reglementare bancară - bnr.ro
-- IGPR (Inspectoratul General al Poliției Române) - politiaromana.ro
-- ISU (Inspectoratul pentru Situații de Urgență) - pompieri, urgențe civile
-- Primăriile - acte stare civilă locale, autorizații construire, impozite locale
-- Consiliile Județene - servicii județene, infrastructură județeană
-- Prefecturile - coordonare județeană, servicii deconcentrate
-
-SERVICII SPECIFICE:
-- Buletin/CI: Direcția de Evidență a Persoanelor (sub primărie)
-- Pașaport: Serviciul de Pașapoarte (MAI) - pașapoarte.ro
-- Permis auto / Înmatriculare: DRPCIV - drpciv.ro
-- Registru Comercial: ONRC - onrc.ro
-- Ajutor social: ANPIS / DGASPC local
-- Protecția copilului: DGASPC județean
-- Cadastru / Carte funciară: ANCPI - ancpi.ro
-- Apostilă: Tribunalele județene
-- Cazier judiciar: IPJ (Inspectoratul de Poliție Județean)
-- Autorizație de construire: Primăria / Consiliul Județean
-- Subvenții agricole: APIA - apia.org.ro
-- Fonduri europene: AFIR (agricultură) - afir.ro, MIPE - mipe.gov.ro
-- Medic de familie: Casa Județeană de Asigurări de Sănătate (CJAS)
-- Pensie: Casa Județeană de Pensii
-- Șomaj: Agenția Județeană pentru Ocuparea Forței de Muncă (AJOFM)
-- Ghișeu online unic: ghiseul.ro`;
-
-const conversationHistory = [];
-
-function addMessage(role, htmlContent, isLoading = false) {
-  const chat = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  if (isLoading) div.id = 'loading-msg';
-  const avatarEmoji = role === 'bot' ? '🏛️' : '👤';
-  const bubbleClass = isLoading ? 'bubble bot loading' : `bubble ${role}`;
-  div.innerHTML = `
-    <div class="avatar ${role}">${avatarEmoji}</div>
-    <div class="${bubbleClass}">${htmlContent}</div>
-  `;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
+// ── HELPERS ─────────────────────────────────────────────
+function escHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function parseResponse(text) {
-  let html = text;
-  const instMatch = text.match(/<!-- INSTITUTII: (\[.*?\]) -->/s);
-  if (instMatch) {
+  var html = text;
+
+  // Render institution cards
+  var m = html.match(/<!-- INSTITUTII: (\[[\s\S]*?\]) -->/);
+  if (m) {
     try {
-      const institutions = JSON.parse(instMatch[1]);
-      let cardsHtml = '';
-      institutions.forEach(inst => {
-        const docs = inst.documente ? inst.documente.map(d => `<span class="doc-tag">${d}</span>`).join('') : '';
-        cardsHtml += `
-          <div class="card-institutie">
-            <strong>🏛️ ${inst.nume}</strong>
-            <div>${inst.descriere || ''}</div>
-            ${inst.website ? `<div style="font-size:0.75rem;color:#003087;margin-top:4px;">🌐 ${inst.website}</div>` : ''}
-            ${docs ? `<div class="doc-list">${docs}</div>` : ''}
-          </div>`;
+      var insts = JSON.parse(m[1]);
+      var cards = '';
+      insts.forEach(function(inst) {
+        var docs = (inst.documente || []).map(function(d) {
+          return '<span class="doc-tag">' + escHtml(d) + '</span>';
+        }).join('');
+        cards += '<div class="card-institutie">'
+          + '<strong>🏛️ ' + escHtml(inst.nume) + '</strong>'
+          + '<div>' + escHtml(inst.descriere || '') + '</div>'
+          + (inst.website ? '<div style="font-size:0.75rem;color:#003087;margin-top:4px;">🌐 ' + escHtml(inst.website) + '</div>' : '')
+          + (docs ? '<div class="doc-list">' + docs + '</div>' : '')
+          + '</div>';
       });
-      html = html.replace(/<!-- INSTITUTII: \[.*?\] -->/s, cardsHtml);
+      html = html.replace(/<!-- INSTITUTII: \[[\s\S]*?\] -->/, cards);
     } catch(e) {
-      html = html.replace(/<!-- INSTITUTII: \[.*?\] -->/s, '');
+      html = html.replace(/<!-- INSTITUTII: \[[\s\S]*?\] -->/, '');
     }
   }
+
+  // Numbered list items
   html = html.replace(/(\d+)\. (.+)/g, '<div style="margin:4px 0"><strong style="color:var(--albastru)">$1.</strong> $2</div>');
+  // Bold
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Line breaks
   html = html.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+
   return html;
 }
 
-async function sendMessage() {
-  const input = document.getElementById('user-input');
-  const btn = document.getElementById('send-btn');
-  const text = input.value.trim();
-  if (!text || btn.disabled) return;
+function addMsg(role, html, loading) {
+  var wrap = document.createElement('div');
+  wrap.className = 'msg ' + role;
+  if (loading) wrap.id = 'loading-msg';
 
-  document.getElementById('quick-topics').style.display = 'none';
-  addMessage('user', escapeHtml(text));
-  conversationHistory.push({ role: 'user', content: text });
-  input.value = '';
-  updateCount();
-  autoResize(input);
-  btn.disabled = true;
+  var av = document.createElement('div');
+  av.className = 'avatar ' + role;
+  av.textContent = role === 'bot' ? '🏛️' : '👤';
 
-  const loadingEl = addMessage('bot', '<div class="dots"><span></span><span></span><span></span></div>', true);
+  var bub = document.createElement('div');
+  bub.className = 'bubble ' + (loading ? 'bot loading' : role);
+  bub.innerHTML = html;
 
-  try {
-    const response = await fetch('https://ghiseu-proxy.ruxandra-boghian.workers.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: conversationHistory
-      })
-    });
-
-    const data = await response.json();
-    const rawText = data.content?.[0]?.text || 'Îmi pare rău, nu am putut procesa cererea. Vă rugăm încercați din nou.';
-    conversationHistory.push({ role: 'assistant', content: rawText });
-
-    const parsed = parseResponse(rawText);
-    const loadingBubble = loadingEl.querySelector('.bubble');
-    loadingBubble.className = 'bubble bot';
-    loadingBubble.innerHTML = parsed;
-
-    const suggestions = getSuggestions(text);
-    if (suggestions.length > 0 && conversationHistory.length < 6) {
-      const sugDiv = document.createElement('div');
-      sugDiv.className = 'suggestions';
-      suggestions.forEach(s => {
-        const b = document.createElement('button');
-        b.className = 'sug-btn';
-        b.textContent = s;
-        b.onclick = () => { document.getElementById('user-input').value = s; sendMessage(); };
-        sugDiv.appendChild(b);
-      });
-      loadingBubble.appendChild(sugDiv);
-    }
-
-    document.getElementById('chat-messages').scrollTop = 9999;
-  } catch(err) {
-    const loadingBubble = loadingEl.querySelector('.bubble');
-    loadingBubble.className = 'bubble bot';
-    loadingBubble.innerHTML = '⚠️ Eroare de conectare. Verificați conexiunea la internet și reîncercați.';
-  }
-
-  btn.disabled = false;
+  wrap.appendChild(av);
+  wrap.appendChild(bub);
+  chatEl.appendChild(wrap);
+  chatEl.scrollTop = chatEl.scrollHeight;
+  return bub;
 }
 
 function getSuggestions(text) {
-  const t = text.toLowerCase();
-  if (t.includes('buletin') || t.includes('identitat')) return ['Care sunt orele de program?', 'Cât durează eliberarea?'];
-  if (t.includes('firmă') || t.includes('societate') || t.includes('srl')) return ['Ce taxe trebuie să plătesc?', 'Pot face totul online?'];
-  if (t.includes('șomaj') || t.includes('ajutor') || t.includes('indemnizat')) return ['Cât durează procesarea dosarului?', 'Ce se întâmplă dacă refuz un loc de muncă?'];
-  if (t.includes('pașaport')) return ['Cât costă un pașaport?', 'Există pașaport de urgență?'];
-  if (t.includes('pensie')) return ['Cum calculez pensia?', 'Ce acte îmi trebuie pentru ieșire la pensie?'];
+  var t = text.toLowerCase();
+  if (t.indexOf('buletin') >= 0 || t.indexOf('identitat') >= 0)
+    return ['Care sunt orele de program?', 'Cât durează eliberarea?'];
+  if (t.indexOf('firm') >= 0 || t.indexOf('srl') >= 0)
+    return ['Ce taxe trebuie să plătesc?', 'Pot face totul online?'];
+  if (t.indexOf('omaj') >= 0 || t.indexOf('ajutor') >= 0)
+    return ['Cât durează procesarea dosarului?'];
+  if (t.indexOf('pa') >= 0 && t.indexOf('aport') >= 0)
+    return ['Cât costă un pașaport?', 'Există pașaport de urgență?'];
+  if (t.indexOf('pensie') >= 0 || t.indexOf('pension') >= 0)
+    return ['Cum calculez pensia?', 'Ce acte îmi trebuie?'];
   return [];
 }
 
+// ── SEND ────────────────────────────────────────────────
+function sendMessage() {
+  var text = inputEl.value.trim();
+  if (!text || isLoading) return;
+
+  topicsEl.style.display = 'none';
+  isLoading = true;
+  btnEl.disabled = true;
+
+  addMsg('user', escHtml(text));
+  history.push({ role: 'user', content: text });
+
+  inputEl.value = '';
+  countEl.textContent = '0 / 500';
+  inputEl.style.height = 'auto';
+
+  var loadBub = addMsg('bot', '<div class="dots"><span></span><span></span><span></span></div>', true);
+
+  fetch(PROXY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: SYSTEM_PROMPT,
+      messages: history
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var raw = (data.content && data.content[0] && data.content[0].text)
+      ? data.content[0].text
+      : 'Îmi pare rău, nu am putut procesa cererea. Vă rugăm încercați din nou.';
+
+    history.push({ role: 'assistant', content: raw });
+
+    var loadWrap = document.getElementById('loading-msg');
+    if (loadWrap) loadWrap.removeAttribute('id');
+    loadBub.className = 'bubble bot';
+    loadBub.innerHTML = parseResponse(raw);
+
+    // Suggestions
+    var sugs = getSuggestions(text);
+    if (sugs.length > 0 && history.length < 8) {
+      var sugDiv = document.createElement('div');
+      sugDiv.className = 'suggestions';
+      sugs.forEach(function(s) {
+        var b = document.createElement('button');
+        b.className = 'sug-btn';
+        b.textContent = s;
+        b.addEventListener('click', function() {
+          inputEl.value = s;
+          sendMessage();
+        });
+        sugDiv.appendChild(b);
+      });
+      loadBub.appendChild(sugDiv);
+    }
+
+    chatEl.scrollTop = chatEl.scrollHeight;
+  })
+  .catch(function(err) {
+    loadBub.className = 'bubble bot';
+    loadBub.innerHTML = '⚠️ Eroare de conectare. Verificați conexiunea la internet și reîncercați.<br><small style="color:#999">' + err.message + '</small>';
+  })
+  .finally(function() {
+    isLoading = false;
+    btnEl.disabled = false;
+    inputEl.focus();
+  });
+}
+
 function sendQuick(text) {
-  document.getElementById('user-input').value = text;
+  inputEl.value = text;
   sendMessage();
 }
 
-function escapeHtml(text) {
-  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+// ── EVENTS ──────────────────────────────────────────────
+btnEl.addEventListener('click', sendMessage);
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function updateCount() {
-  const v = document.getElementById('user-input').value.length;
-  document.getElementById('char-count').textContent = `${v} / 500`;
-}
-
-document.getElementById('user-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+inputEl.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
 });
 
-addMessage('bot', `
-  <strong>Bună ziua! Sunt asistentul virtual pentru servicii publice din România. 🏛️</strong><br><br>
-  Vă pot ajuta să identificați:
-  <div style="margin-top:8px">
-    <div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Instituția competentă pentru problema dvs.</div>
-    <div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Documentele necesare</div>
-    <div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Pașii de urmat</div>
-    <div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Dacă există varianta online</div>
-  </div>
-  <br>Alegeți un subiect frecvent de mai sus sau descrieți situația dvs. în caseta de text.
-`);
+inputEl.addEventListener('input', function() {
+  countEl.textContent = inputEl.value.length + ' / 500';
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+});
+
+// ── WELCOME MESSAGE ─────────────────────────────────────
+addMsg('bot',
+  '<strong>Bună ziua! Sunt asistentul virtual pentru servicii publice din România. 🏛️</strong><br><br>'
+  + 'Vă pot ajuta să identificați:'
+  + '<div style="margin-top:8px">'
+  + '<div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Instituția competentă pentru problema dvs.</div>'
+  + '<div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Documentele necesare</div>'
+  + '<div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Pașii de urmat</div>'
+  + '<div style="margin:4px 0"><strong style="color:var(--albastru)">›</strong> Dacă există varianta online</div>'
+  + '</div><br>'
+  + 'Alegeți un subiect frecvent de mai sus sau descrieți situația dvs. în caseta de text.'
+);
 </script>
 </body>
 </html>
